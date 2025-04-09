@@ -1,0 +1,70 @@
+.app-container {
+  min-height: 100vh;
+  background-color: var(--chakra-colors-gray-50);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.header {
+  text-align: center;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.header-title {
+  margin-bottom: 1rem;
+}
+
+.header-subtitle {
+  color: var(--chakra-colors-gray-600);
+}
+
+.input-container {
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.input-field {
+  font-size: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--chakra-shadows-sm);
+}
+
+.input-field:focus {
+  box-shadow: var(--chakra-shadows-outline);
+  border-color: var(--chakra-colors-blue-500);
+}
+
+.generate-button {
+  width: 200px;
+  border-radius: 9999px;
+  box-shadow: var(--chakra-shadows-md);
+  transition: all 0.2s;
+}
+
+.generate-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--chakra-shadows-lg);
+}
+
+.flashcards-grid {
+  width: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.flashcard-wrapper {
+  height: 300px;
+  box-shadow: var(--chakra-shadows-lg);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.flashcard-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--chakra-shadows-xl);
+} 

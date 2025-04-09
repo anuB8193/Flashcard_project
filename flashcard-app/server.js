@@ -11,9 +11,14 @@ const port = 3000;
 app.use(cors());
 app.use(express.text());
 
+// Initialize OpenAI client with OpenRouter configuration
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENAI_API_KEY,
+  defaultHeaders: {
+    "HTTP-Referer": "http://localhost:5173",
+    "X-Title": "AI Flashcard Generator",
+  },
 });
 
 const systemPrompt = `You are a flashcard creator that MUST return responses in valid JSON format. Your response should contain ONLY the JSON object, with no additional text, explanations, or formatting.
@@ -44,17 +49,19 @@ app.post('/api/flashcards', async (req, res) => {
   try {
     const prompt = req.body;
 
+    console.log('Making request to OpenRouter API...');
+    
     const completion = await openai.chat.completions.create({
-      model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
+      model: "nvidia/llama-3.1-nemotron-nano-8b-v1:free",
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Generate 10 flashcards about: ${prompt}` }
       ],
-      headers: {
-        'HTTP-Referer': 'http://localhost:5173',
-        'X-Title': 'AI Flashcard Generator'
-      }
+      temperature: 0.7,
+      max_tokens: 1024
     });
+
+    console.log('OpenRouter API Response:', completion); // Debug log
 
     const content = completion.choices[0].message.content;
     
@@ -71,15 +78,17 @@ app.post('/api/flashcards', async (req, res) => {
       console.error('Error parsing JSON:', cleanedContent);
       res.status(500).json({ 
         error: 'Failed to parse flashcards response',
-        details: parseError.message
+        details: parseError.message,
+        rawContent: cleanedContent // Include raw content for debugging
       });
     }
   } catch (error) {
     console.error('Error generating flashcards:', error);
-    res.status(500).json({ error: 'Failed to generate flashcards.' });
+    res.status(500).json({ error: error.message || 'Failed to generate flashcards.' });
   }
 });
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+  console.log('Using OpenRouter with NVIDIA Llama 3.1 Nemotron Nano 8B');
 }); 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { ChakraProvider, Box, Container, VStack, Input, Button, Text, Heading, useToast } from '@chakra-ui/react'
+import { ChakraProvider, Box, Container, VStack, Input, Button, Text, Heading, useToast, SimpleGrid, Card, CardBody } from '@chakra-ui/react'
 import Flashcard from './components/Flashcard'
+import './styles/App.css'
 
 function App() {
   const [prompt, setPrompt] = useState('')
@@ -51,39 +52,53 @@ function App() {
 
   return (
     <ChakraProvider>
-      <Box minH="100vh" bg="gray.50" py={8}>
-        <Container maxW="container.lg">
-          <VStack spacing={8}>
-            <Heading>Flashcard Generator</Heading>
-            <Text>Enter a topic or subject to generate flashcards</Text>
+      <Box className="app-container">
+        <Container maxW="container.xl" centerContent>
+          <VStack spacing={8} w="100%" align="stretch">
+            <Box className="header">
+              <Heading size="2xl" className="header-title">Flashcard Generator</Heading>
+              <Text fontSize="xl" className="header-subtitle">Enter a topic or subject to generate flashcards</Text>
+            </Box>
             
-            <Input
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Enter your topic (e.g., 'Python programming basics')"
-              size="lg"
-              width="100%"
-            />
-            
-            <Button
-              colorScheme="blue"
-              onClick={generateFlashcards}
-              isLoading={loading}
-              loadingText="Generating flashcards..."
-            >
-              Generate Flashcards
-            </Button>
+            <Box className="input-container">
+              <VStack spacing={4}>
+                <Input
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Enter your topic (e.g., 'Python programming basics')"
+                  size="lg"
+                  className="input-field"
+                />
+                
+                <Button
+                  colorScheme="blue"
+                  size="lg"
+                  onClick={generateFlashcards}
+                  isLoading={loading}
+                  loadingText="Generating flashcards..."
+                  className="generate-button"
+                >
+                  Generate Flashcards
+                </Button>
+              </VStack>
+            </Box>
 
             {flashcards.length > 0 && (
-              <VStack spacing={4} width="100%">
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} className="flashcards-grid">
                 {flashcards.map((card, index) => (
-                  <Flashcard
-                    key={index}
-                    front={card.front}
-                    back={card.back}
-                  />
+                  <Card 
+                    key={index} 
+                    className="flashcard-wrapper"
+                  >
+                    <CardBody p={0}>
+                      <Flashcard
+                        front={card.front}
+                        back={card.back}
+                      />
+                    </CardBody>
+                  </Card>
                 ))}
-              </VStack>
+              </SimpleGrid>
             )}
           </VStack>
         </Container>
